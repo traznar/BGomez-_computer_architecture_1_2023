@@ -17,13 +17,26 @@ _start:
 	push rax
 	mov rdi, rax
 	mov rax, SYS_READ
-	mov rsi, text
-	mov rdx, 635915
-	syscall
+
+	mov rsi, text 			;puntero (rsi) tiene el texto
+	mov rdx, 635915                 
 	
+	mov rcx,rdx
+	syscall
+
+	mov esi,text
+	
+ 
 	mov rax, SYS_CLOSE
-	pop rdi
+	;pop rdi
 	syscall
 	
 	print text
+	
+	
+_parse:
+	mov bl,[esi]
+	sub bl,'0' 
 	exit
+
+	
