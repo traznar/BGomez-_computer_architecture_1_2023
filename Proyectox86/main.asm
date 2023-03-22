@@ -69,7 +69,7 @@ _llenararray:
 	add bl,'0'
 	mov [array+edi], bl
 	add edi,1
-	cmp edi,50
+	cmp edi,600000
 	je _createfile
 	jmp _llenararray
 
@@ -78,7 +78,7 @@ _createfile:
 	mov ebx, newfile
 	mov eax, 8
 	int 80h
-	mov edx,60
+	mov edx,edi
 	mov ecx,array
 	mov ebx, eax
 	mov eax, 4
