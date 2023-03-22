@@ -4,7 +4,7 @@ section .data
 	numItera db 128
 	char1 db 1 ,0
 	space db '32',0
-	array TIMES 600000 db 0
+	array TIMES 635915 db 0
 
 section .bss 
 	text resb 640000
@@ -69,7 +69,7 @@ _llenararray:
 	add bl,'0'
 	mov [array+edi], bl
 	add edi,1
-	cmp edi,600000
+	cmp edi, 635915
 	je _createfile
 	jmp _llenararray
 
