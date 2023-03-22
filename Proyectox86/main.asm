@@ -3,9 +3,12 @@ section .data
 	newfile db 'decrypted1.txt',0
 	numItera db 128
 	char1 db 1 ,0
+	space db '32',0
+	array TIMES 600000 db 0
 
 section .bss 
 	text resb 640000
+	text2 resb 640000
 	printSpace resb 8
 	
 section .text
@@ -52,28 +55,35 @@ _start:
 	mov esi,text
 	mov eax, 3
 	syscall
-
+	
 	print text
-	jmp _createfile
+	mov edi,0
+	jmp _llenararray
+
+_llenararray:
+	mov edx, 1
+	xor ebx,ebx
+	mov bl,[esi+edi]
+	sub bl,'0' 
+	;mov [array], bl
+	add bl,'0'
+	mov [array+edi], bl
+	add edi,1
+	cmp edi,50
+	je _createfile
+	jmp _llenararray
 
 _createfile:
 	mov ecx, 0777o
 	mov ebx, newfile
 	mov eax, 8
 	int 80h
-
-	mov edx, 1
-	xor ebx,ebx
-	mov bl,[esi]
-	sub bl,'0' 
-	;mov [char1], bl
-	add bl,'0'
-	mov [char1], bl
-
-	mov ecx,char1
+	mov edx,60
+	mov ecx,array
 	mov ebx, eax
 	mov eax, 4
 	int 80h
 	exit
-
+_exit:
+	exit
 	
