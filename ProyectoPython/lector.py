@@ -1,0 +1,1 @@
+print("configuracion basica del proyecto")
