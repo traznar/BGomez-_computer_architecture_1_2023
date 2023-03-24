@@ -5,7 +5,9 @@ section .data
 	char1 dw 0
 	char2 dw 0
 	char3 dw 0
-	operFinal db 1,0		
+	contador dw 0
+	operador1 dw 0
+	operador2 dw 0		
 	space db '32',0
 	array TIMES 635915 db 0
 
@@ -118,7 +120,7 @@ _multi10:
     mov bh,[esi+edx]   ;sumamos lo que esta en eax + el dato de en [esi+ebx]
     sub bh,'0'
     add al,bh
-    mov [char2],al
+    mov [char1],al
     ;print char2
     jmp _reset
 
@@ -132,7 +134,7 @@ _numero3:
     mov al,bl
     mov edx,100
     mul edx
-    mov [char3],al
+    mov [char1],al
     jmp _multi100
 
 _multi100:
@@ -146,23 +148,56 @@ _multi100:
     mov ah,bh
     mov edx,10
     mul edx
-    add [char3],ah
+    add [char1],ah
     sub ecx,1
     mov edx, edi    
     sub edx,ecx
     xor ebx,ebx
     mov bl,[esi+edx]
     sub bl,'0'
-    add [char3],bl
+    add [char1],bl
     xor ebx,ebx
-    mov bl,[char3]
+    mov bl,[char1]
     jmp _reset
 
 _reset:
     mov ecx,0
-    xor ebx,ebx
+    xor ebx,ebx		;reinicia ebx=0
+
+    mov bl,[contador]   ; asigna el contador a bl para incrementarlo
+    add bl,1		; lo incrementa en 1 
+    add [contador],bl
+	
+    cmp bl,1 		; si es igual a 1 significa que tenemos el primer dato
+    je _preRSA1		
+
+    mov [contador],bl
+
+    cmp bl,2		; si es igual a 2 significa que tenemos el segundo dato
+    je  _preRSA2
+
     jmp _numberCreator
 
+_preRSA1:
+	xor ebx, ebx
+	mov bl, [char1]
+	mov [operador1],bl
+	mov bh, [operador1]
+	xor ebx, ebx
+	jmp _numberCreator
+_preRSA2:
+	xor ebx,ebx
+	mov bh, [char1]
+	mov [operador2],bh
+	mov bl, [operador2]
+	xor ebx, ebx
+	mov bh,0
+	mov [contador], bh
+	mov bl, [contador]
+	xor ebx, ebx
+	jmp _RSA
+_RSA:
+		
 _llenararray:
 	mov edx, 1
 	xor ebx,ebx
