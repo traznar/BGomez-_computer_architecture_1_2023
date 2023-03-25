@@ -6,14 +6,27 @@ section .data
 	char2 dw 0
 	char3 dw 0
 	contador dw 0
-	operador1 dw 0
-	operador2 dw 0		
+	operador1 dd 0
+	operador2 dd 0		
+	
 	space db '32',0
-	array TIMES 635915 db 0
+	array TIMES 1715236 db 0
+
+	d dd 1531
+	auxD dd 1
+	n dd 2747
+
+	resFinal dd 1
+	rsaActual dd 0
+	reFinalAux dd 1
+
+ 	operadorBase dd 0
+
 
 section .bss 
-	text resb 640000
-	text2 resb 640000
+
+	text resb 1715236
+	text2 resb 1715236
 	printSpace resb 8
 	
 section .text
@@ -23,6 +36,7 @@ section .text
     mov eax, %1
     mov [printSpace], eax
     mov ebx, 0
+
 %%printLoop:
     mov cl, [eax]
     cmp cl, 0
@@ -55,7 +69,7 @@ _start:
 	mov eax, 0
 	
 	mov esi, text 			;puntero (rsi) tiene el texto
-	mov edx, 635915                 ; NO TOCAR ESI Y EDX
+	mov edx, 1715236                 ; NO TOCAR ESI Y EDX
 	syscall
 
 	mov esi,text
@@ -197,6 +211,82 @@ _preRSA2:
 	xor ebx, ebx
 	jmp _RSA
 _RSA:
+	xor ebx,ebx
+	xor eax,eax
+	xor edx,edx
+	mov ebx,[operador1]
+	mov edx,[operador2]
+	shl ebx,8
+	add ebx,edx
+	mov [operadorBase], ebx
+
+	xor ebx,ebx
+	mov ebx,[operadorBase]  ;ver que se guarde bien
+	xor ebx,ebx
+	mov ebx,[d]
+	mov [auxD],ebx
+	xor ebx,ebx
+	xor edx,edx
+	xor eax,eax
+	xor ecx,ecx
+	mov ecx,[d]
+	jmp _rsaloop
+
+_rsaloop:
+	xor ebx,ebx
+	xor edx,edx
+	xor eax,eax
+	;mov ecx,[d]	
+	mov edx,1
+	and edx,ecx
+	
+	cmp ecx,0
+	je _numberCreator	
+	cmp edx,0
+	je _caso0
+	cmp edx,1
+	je _caso1
+_caso0:
+	xor edx,edx
+	xor eax,eax
+	mov ebx,[n]
+	mov eax,[operadorBase]
+	imul eax,eax
+	xor edx,edx 
+	div ebx
+	mov eax, edx
+	mov [operadorBase],eax
+	shr ecx,1
+	xor eax,eax
+	mov eax,[operadorBase]
+	jmp _rsaloop	
+
+_caso1:
+	xor eax,eax
+	xor ebx,ebx
+	xor edx,edx
+	mov ebx,[n]
+	mov eax,[resFinal]
+	mov edx,[operadorBase]
+	imul eax,edx
+ 	xor edx,edx
+	div ebx
+	mov [resFinal],edx
+	xor edx,edx
+	xor eax,eax	
+	mov eax,[operadorBase]	
+	imul eax,eax
+	xor edx,edx
+	div ebx
+	mov [operadorBase],edx
+	shr ecx,1
+	xor eax,eax
+	xor edx,edx
+	xor ebx,ebx
+
+	jmp _rsaloop
+	
+	
 		
 _llenararray:
 	mov edx, 1
@@ -207,7 +297,7 @@ _llenararray:
 	add bl,'0'
 	mov [array+edi], bl
 	add edi,1
-	cmp edi, 635915
+	cmp edi, 1715236
 	je _createfile
 	jmp _llenararray
 
