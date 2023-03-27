@@ -2,7 +2,7 @@ import PIL
 
 from PIL import __version__
 PIL.PILLOW_VERSION = __version__
-from PIL import Image
+import PIL.Image as Image
 
 print(PIL.PILLOW_VERSION)
 
