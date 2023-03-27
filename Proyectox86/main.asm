@@ -6,11 +6,12 @@ section .data
 	char2 dw 0
 	char3 dw 0
 	contador dw 0
+	
 	operador1 dd 0
 	operador2 dd 0		
 	
 	space db '32',0
-	array TIMES 1715236 db 0
+	array TIMES 1715230 db 0
 
 	d dd 1531
 	auxD dd 1
@@ -20,7 +21,17 @@ section .data
 	rsaActual dd 0
 	reFinalAux dd 1
 
+	valor1 dd 0
+	valor2 dd 0
+ 	valor3 dd 0
+	valor4 dd 32
+
+
  	operadorBase dd 0
+
+	contadorPrincipal dd 0
+	contadorArray dd 0
+	contadorFinal dd 0
 
 
 section .bss 
@@ -90,6 +101,13 @@ _numberCreator:
     ;add bl,'0'
 
     add edi,1
+
+    xor eax,eax
+    mov eax,[contadorFinal]
+    add eax,1 
+    mov [contadorFinal],eax
+    xor eax,eax
+
     add ecx,1
     
     cmp bl, 32
@@ -241,14 +259,96 @@ _rsaloop:
 	and edx,ecx
 	
 	cmp ecx,0
-	je _numberCreator	
+	je _convertirascii	
 	cmp edx,0
 	je _caso0
 	cmp edx,1
 	je _caso1
+
+_convertirascii:
+	xor eax,eax
+	xor edx,edx
+	xor ebx,ebx
+	mov eax,[resFinal]
+	mov ebx,10
+	div ebx
+	add edx,'0'
+	mov [valor3],edx
+	
+	xor edx,edx
+	xor ebx,ebx
+	mov ebx,10
+	div ebx
+	add edx,'0'
+	mov [valor2],edx
+	
+	xor edx,edx
+	xor ebx,ebx
+	mov ebx,10
+	div ebx
+	add edx,'0'
+	mov [valor1],edx
+	
+	xor eax,eax
+	xor ebx,ebx
+	xor edx,edx
+	jmp _escribirarray
+
+
+_escribirarray:
+
+	xor edx,edx
+	xor eax,eax
+	xor ebx,ebx
+
+	mov eax,[contadorArray]
+	mov edx,1
+
+	mov ebx,[valor1]		
+	mov [array+eax],ebx
+	add eax,1
+
+	mov ebx,[valor2]		
+	mov [array+eax],ebx
+	add eax,1	
+
+	mov ebx,[valor3]		
+	mov [array+eax],ebx
+	add eax,1
+
+
+	mov ebx,[valor4]		
+	mov [array+eax],ebx
+	add eax,1
+
+	mov [contadorArray],eax
+	mov eax,[contadorArray]
+	
+	xor ebx,ebx
+	mov ebx,1
+	mov [resFinal],ebx
+
+	xor ebx,ebx
+	mov ebx,0
+	mov [operadorBase],ebx
+	
+	xor ebx,ebx	
+	xor eax, eax
+	mov eax, [contadorFinal]
+	cmp eax, 1715230
+	jg _createfile
+
+	xor eax,eax
+	xor ebx,ebx
+	xor edx,edx
+
+	jmp _numberCreator
+		
+
 _caso0:
 	xor edx,edx
 	xor eax,eax
+	xor ebx,ebx
 	mov ebx,[n]
 	mov eax,[operadorBase]
 	imul eax,eax
@@ -297,7 +397,7 @@ _llenararray:
 	add bl,'0'
 	mov [array+edi], bl
 	add edi,1
-	cmp edi, 1715236
+	cmp edi, 1715230
 	je _createfile
 	jmp _llenararray
 
