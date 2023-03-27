@@ -11,7 +11,7 @@ section .data
 	operador2 dd 0		
 	
 	space db '32',0
-	array TIMES 1715230 db 0
+	array TIMES 1715236 db 0
 
 	d dd 1531
 	auxD dd 1
@@ -335,7 +335,7 @@ _escribirarray:
 	xor ebx,ebx	
 	xor eax, eax
 	mov eax, [contadorFinal]
-	cmp eax, 1715230
+	cmp eax, 1300000
 	jg _createfile
 
 	xor eax,eax
@@ -397,7 +397,7 @@ _llenararray:
 	add bl,'0'
 	mov [array+edi], bl
 	add edi,1
-	cmp edi, 1715230
+	cmp edi, 1715235
 	je _createfile
 	jmp _llenararray
 
